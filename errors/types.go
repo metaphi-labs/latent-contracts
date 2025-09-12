@@ -18,6 +18,15 @@ type ServiceError struct {
 	// Service identifies which service generated the error
 	Service string `json:"service"`
 	
+	// HTTPStatus for HTTP responses (e.g., 400, 403, 500)
+	HTTPStatus int `json:"http_status"`
+	
+	// Category for error grouping (validation, auth, system, etc.)
+	Category ErrorCategory `json:"category"`
+	
+	// Severity for logging/monitoring
+	Severity Severity `json:"severity"`
+	
 	// Retryable indicates if the client should retry the request
 	Retryable bool `json:"retryable"`
 	
@@ -29,6 +38,15 @@ type ServiceError struct {
 	
 	// JobID for async operations (if applicable)
 	JobID string `json:"job_id,omitempty"`
+	
+	// UserID for tracking (if available)
+	UserID string `json:"user_id,omitempty"`
+	
+	// Cause wraps the original error
+	Cause error `json:"-"` // Don't serialize, but available for debugging
+	
+	// CauseMessage is the string representation of Cause for serialization
+	CauseMessage string `json:"cause,omitempty"`
 	
 	// Metadata contains structured error details
 	Metadata *ErrorMetadata `json:"metadata,omitempty"`
@@ -91,6 +109,19 @@ type ViolationDetail struct {
 	ProviderCode string `json:"provider_code,omitempty"`
 }
 
+// ErrorCategory represents the category of error for grouping
+type ErrorCategory string
+
+const (
+	CategoryValidation ErrorCategory = "validation"
+	CategoryAuth       ErrorCategory = "auth"
+	CategorySystem     ErrorCategory = "system"
+	CategoryAI         ErrorCategory = "ai"
+	CategoryMedia      ErrorCategory = "media"
+	CategoryBilling    ErrorCategory = "billing"
+	CategoryRate       ErrorCategory = "rate_limit"
+)
+
 // Severity represents the severity level of an error or violation
 type Severity string
 
@@ -133,10 +164,18 @@ func (e *ServiceError) ToJSON() ([]byte, error) {
 
 // NewServiceError creates a new ServiceError with required fields
 func NewServiceError(code ErrorCode, message string, service string, retryable bool) *ServiceError {
+	// Auto-determine category, severity, and HTTP status from error code
+	category := determineCategory(code)
+	severity := determineSeverity(code)
+	httpStatus := determineHTTPStatus(code)
+	
 	return &ServiceError{
 		Code:       code,
 		Message:    message,
 		Service:    service,
+		HTTPStatus: httpStatus,
+		Category:   category,
+		Severity:   severity,
 		Retryable:  retryable,
 		OccurredAt: time.Now(),
 	}
@@ -196,5 +235,38 @@ func (e *ServiceError) WithProvider(provider string, code string) *ServiceError 
 	}
 	e.Metadata.Provider = provider
 	e.Metadata.ProviderCode = code
+	return e
+}
+
+// WithUserID adds a user ID to the error
+func (e *ServiceError) WithUserID(userID string) *ServiceError {
+	e.UserID = userID
+	return e
+}
+
+// WithCause wraps an underlying error
+func (e *ServiceError) WithCause(cause error) *ServiceError {
+	e.Cause = cause
+	if cause != nil {
+		e.CauseMessage = cause.Error()
+	}
+	return e
+}
+
+// WithHTTPStatus overrides the HTTP status code
+func (e *ServiceError) WithHTTPStatus(status int) *ServiceError {
+	e.HTTPStatus = status
+	return e
+}
+
+// WithCategory overrides the error category
+func (e *ServiceError) WithCategory(category ErrorCategory) *ServiceError {
+	e.Category = category
+	return e
+}
+
+// WithSeverity overrides the severity
+func (e *ServiceError) WithSeverity(severity Severity) *ServiceError {
+	e.Severity = severity
 	return e
 }

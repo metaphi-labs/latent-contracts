@@ -403,7 +403,5 @@ func NewVideoProcessorMetadata(
 		CreditsUsed:    creditsUsed,
 		Provider:       "video-processor",
 		RequestID:      requestID,
-		ConversationID: conversationID,
-		UserID:         userID,
 	}
 }

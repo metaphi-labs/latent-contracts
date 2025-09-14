@@ -198,7 +198,5 @@ func NewMediaAIMetadata(
 		Provider:       provider,
 		ProviderJobID:  providerJobID,
 		RequestID:      requestID,
-		ConversationID: conversationID,
-		UserID:         userID,
 	}
 }

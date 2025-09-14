@@ -84,7 +84,7 @@ type NanoBananaParams struct {
 	Prompt string `json:"prompt" validate:"required,min=1,max=8000"`
 
 	// Input images for editing, style transfer, or composition (up to 3 recommended)
-	Images  []string         `json:"images,omitempty" validate:"omitempty,max=3"`   // Input images for editing/composition
+	StorageURLs []string      `json:"storage_urls,omitempty" validate:"omitempty,max=3"` // GCS URLs for input images
 	Context []ContextMessage `json:"context,omitempty" validate:"omitempty,max=10"` // Conversation history for multi-turn
 
 	// Generation parameters

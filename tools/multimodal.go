@@ -10,15 +10,15 @@ type ContextMessage struct {
 
 // MessagePart can be text or image reference
 type MessagePart struct {
-	Text     string `json:"text,omitempty"`
-	ImageURL string `json:"image_url,omitempty"`
+	Text       string `json:"text,omitempty"`
+	StorageURL string `json:"storage_url,omitempty"` // GCS URL for image
 }
 
 // Validate ensures the message part is well-formed
 func (m *MessagePart) Validate() error {
 	// At least one field must be populated
-	if m.Text == "" && m.ImageURL == "" {
-		return fmt.Errorf("message part must have either text or image_url")
+	if m.Text == "" && m.StorageURL == "" {
+		return fmt.Errorf("message part must have either text or storage_url")
 	}
 	return nil
 }

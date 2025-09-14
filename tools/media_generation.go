@@ -1,5 +1,7 @@
 package tools
 
+import "fmt"
+
 // === Image Generation Tools (Imagen) ===
 
 // GenerateImageImagenParams for generate-image-imagen tool

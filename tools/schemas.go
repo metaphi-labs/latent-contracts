@@ -26,8 +26,8 @@ func GetJSONSchema(toolName ToolName) (map[string]interface{}, error) {
 		schema = reflector.Reflect(&GenerateImageImagenUltraParams{})
 	case GenerateImageFlash:
 		schema = reflector.Reflect(&GenerateImageFlashParams{})
-	case GeneralImageFlash:
-		schema = reflector.Reflect(&GeneralImageFlashParams{})
+	case NanoBanana:
+		schema = reflector.Reflect(&NanoBananaParams{})
 	case GenerateVideoVeo3:
 		schema = reflector.Reflect(&GenerateVideoVeo3Params{})
 	case GenerateVideoVeo3Fast:
@@ -86,7 +86,7 @@ func GetAllSchemas() map[ToolName]map[string]interface{} {
 
 	tools := []ToolName{
 		GenerateImageImagen, GenerateImageImagenFast, GenerateImageImagenUltra,
-		GenerateImageFlash, GeneralImageFlash,
+		GenerateImageFlash, NanoBanana,
 		GenerateVideoVeo3, GenerateVideoVeo3Fast, GenerateVideoVeo3FastNoAudio, GenerateVideoVeo3NoAudio,
 		GenerateMusicLyria,
 		CombineVideos, TrimVideo, ImageAudioMerge, ExtractFrame, MergeImages,

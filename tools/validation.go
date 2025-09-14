@@ -37,10 +37,6 @@ func (p GenerateImageFlashParams) Validate() error {
 	return nil
 }
 
-func (p GeneralImageFlashParams) Validate() error {
-	// No required fields for this tool
-	return nil
-}
 
 func (p GenerateVideoVeo3Params) Validate() error {
 	// Custom validation for required_without

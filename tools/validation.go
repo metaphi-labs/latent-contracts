@@ -30,14 +30,6 @@ func (p GenerateImageImagenUltraParams) Validate() error {
 	return nil
 }
 
-func (p GenerateImageFlashParams) Validate() error {
-	if err := validate.Struct(p); err != nil {
-		return fmt.Errorf("validation failed: %w", err)
-	}
-	return nil
-}
-
-
 func (p GenerateVideoVeo3Params) Validate() error {
 	// Custom validation for required_without
 	if p.Prompt == "" && p.Image == nil {

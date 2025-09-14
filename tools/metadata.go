@@ -95,21 +95,6 @@ var Metadata = map[ToolName]ToolMeta{
 		EndpointPath: "/api/generate-image-imagen-ultra/generate/async",
 	},
 
-	GenerateImageFlash: {
-		Name:         GenerateImageFlash,
-		Credits:      10,
-		Type:         ToolTypeMedia,
-		ServiceType:  ServiceTypeMediaAI,
-		Description:  "Generate images using Flash technology. Fast and efficient image generation.",
-		Examples: []string{
-			"Generate a quick concept image",
-			"Create a draft illustration",
-			"Make a simple graphic",
-		},
-		OutputType:   OutputTypeImage,
-		EndpointPath: "/api/generate-image-flash/generate/async",
-	},
-
 	NanoBanana: {
 		Name:         NanoBanana,
 		Credits:      3,

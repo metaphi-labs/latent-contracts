@@ -67,15 +67,7 @@ type GenerateImageImagenUltraParams struct {
 	OutputCompressionQuality  int     `json:"output_compression_quality,omitempty" validate:"omitempty,min=1,max=100"`
 }
 
-// === Image Generation Tools (Flash) ===
-
-// GenerateImageFlashParams for generate-image-flash tool
-type GenerateImageFlashParams struct {
-	Prompt string `json:"prompt" validate:"required"`
-	Style  string `json:"style,omitempty"`
-	Width  int    `json:"width,omitempty"`
-	Height int    `json:"height,omitempty"`
-}
+// === Multimodal Image Generation ===
 
 // NanoBananaParams for nano-banana tool (Gemini 2.5 Flash Image Preview)
 // Supports native image generation, editing, style transfer, and multi-image composition

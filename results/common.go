@@ -46,6 +46,7 @@ type MediaAsset struct {
 	SignedExpiry *time.Time `json:"signed_expiry,omitempty"` // When the signed URL expires
 
 	// Media properties
+	Type     string `json:"type"`        // "image", "video", "audio"
 	MimeType string `json:"mime_type"`
 	FileSize int64  `json:"file_size_bytes"`
 

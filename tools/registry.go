@@ -14,7 +14,7 @@ const (
 	GenerateImageImagenFast      ToolName = "generate-image-imagen-fast"
 	GenerateImageImagenUltra     ToolName = "generate-image-imagen-ultra"
 	GenerateImageFlash           ToolName = "generate-image-flash"
-	GeneralImageFlash            ToolName = "general-image-flash"
+	NanoBanana                   ToolName = "nano-banana"
 	GenerateVideoVeo3            ToolName = "generate-video-veo3"
 	GenerateVideoVeo3Fast        ToolName = "generate-video-veo3-fast"
 	GenerateVideoVeo3FastNoAudio ToolName = "generate-video-veo3-fast-no-audio"
@@ -71,8 +71,8 @@ func ParseAndValidateParams(toolName string, params map[string]interface{}) erro
 		}
 		return p.Validate()
 
-	case GeneralImageFlash:
-		var p GeneralImageFlashParams
+	case NanoBanana:
+		var p NanoBananaParams
 		if err := json.Unmarshal(jsonBytes, &p); err != nil {
 			return fmt.Errorf("invalid params for %s: %w", toolName, err)
 		}
@@ -171,7 +171,7 @@ func ParseAndValidateParams(toolName string, params map[string]interface{}) erro
 func IsValidToolName(name string) bool {
 	switch ToolName(name) {
 	case GenerateImageImagen, GenerateImageImagenFast, GenerateImageImagenUltra,
-		GenerateImageFlash, GeneralImageFlash,
+		GenerateImageFlash, NanoBanana,
 		GenerateVideoVeo3, GenerateVideoVeo3Fast, GenerateVideoVeo3FastNoAudio, GenerateVideoVeo3NoAudio,
 		GenerateMusicLyria,
 		CombineVideos, TrimVideo, ImageAudioMerge, ExtractFrame, MergeImages,

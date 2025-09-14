@@ -75,10 +75,43 @@ type GenerateImageFlashParams struct {
 	Height int    `json:"height,omitempty"`
 }
 
-// GeneralImageFlashParams for general-image-flash tool
-type GeneralImageFlashParams struct {
-	BackgroundURL string `json:"background_url,omitempty"`
-	ForegroundURL string `json:"foreground_url,omitempty"`
+// NanoBananaParams for nano-banana tool (Gemini 2.5 Flash multimodal)
+type NanoBananaParams struct {
+	// Core generation/analysis prompt
+	Prompt string `json:"prompt" validate:"required,min=1,max=8000"`
+
+	// Multimodal inputs
+	Images  []string         `json:"images,omitempty" validate:"omitempty,max=16"`  // Input images (GCS URLs or signed URLs)
+	Context []ContextMessage `json:"context,omitempty" validate:"omitempty,max=10"` // Conversation history
+
+	// Generation parameters (let the model be smart)
+	Temperature     *float64 `json:"temperature,omitempty" validate:"omitempty,min=0,max=2"`
+	TopP            *float64 `json:"top_p,omitempty" validate:"omitempty,min=0,max=1"`
+	MaxOutputTokens *int32   `json:"max_output_tokens,omitempty" validate:"omitempty,min=1,max=32768"`
+
+
+	// Safety (optional, Flash is generally safe)
+	SafetyFilterLevel string `json:"safety_filter_level,omitempty" validate:"omitempty,oneof=BLOCK_NONE BLOCK_ONLY_HIGH BLOCK_MEDIUM_AND_ABOVE"`
+
+	// Additional control
+	Seed *int64 `json:"seed,omitempty" validate:"omitempty,min=0,max=4294967295"`
+}
+
+// Validate ensures NanoBananaParams is well-formed
+func (n *NanoBananaParams) Validate() error {
+	// Prompt is required
+	if n.Prompt == "" {
+		return fmt.Errorf("prompt is required")
+	}
+
+	// Validate context messages if provided
+	for i, msg := range n.Context {
+		if err := msg.Validate(); err != nil {
+			return fmt.Errorf("context[%d]: %w", i, err)
+		}
+	}
+
+	return nil
 }
 
 // === Video Generation Tools (Veo3) ===

@@ -6,7 +6,7 @@ import (
 )
 
 // MediaGenerationResult for image/video/audio generation tools
-// Used by: generate-image-imagen, generate-video-veo3, generate-music-lyria, etc.
+// Used by: generate-image-imagen, generate-video-veo3, generate-music-lyria, nano-banana, etc.
 type MediaGenerationResult struct {
 	// Generated assets
 	Assets []MediaAsset `json:"assets"`
@@ -36,6 +36,7 @@ type MediaGenerationResult struct {
 	// Multi-generation info
 	TotalRequested  int    `json:"total_requested"`
 	TotalGenerated  int    `json:"total_generated"`
+
 }
 
 // Constructor functions for Media AI service to use

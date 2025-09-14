@@ -117,10 +117,35 @@ type GenerateVideoVeo3FastParams struct {
 }
 
 // GenerateVideoVeo3FastNoAudioParams for generate-video-veo3-fast-no-audio tool
-type GenerateVideoVeo3FastNoAudioParams = GenerateVideoVeo3FastParams
+type GenerateVideoVeo3FastNoAudioParams struct {
+	Prompt              string  `json:"prompt" validate:"required,min=10,max=2000"`
+	Seed                *int64  `json:"seed,omitempty" validate:"omitempty,min=0,max=4294967295"`
+	FPS                 int     `json:"fps,omitempty" validate:"omitempty,oneof=24 30 60"`
+	Duration            int     `json:"duration,omitempty" validate:"omitempty,min=5,max=8"`
+	AspectRatio         string  `json:"aspect_ratio,omitempty" validate:"omitempty,oneof=16:9 9:16"`
+	SampleCount         int     `json:"sample_count,omitempty" validate:"omitempty,min=1,max=4"`
+	EnhancePrompt       bool    `json:"enhance_prompt,omitempty"`
+	NegativePrompt      string  `json:"negative_prompt,omitempty" validate:"omitempty,max=500"`
+	PersonGeneration    string  `json:"person_generation,omitempty" validate:"omitempty,oneof=allow_adult dont_allow"`
+	CompressionQuality  string  `json:"compression_quality,omitempty" validate:"omitempty,oneof=low medium high"`
+}
 
 // GenerateVideoVeo3NoAudioParams for generate-video-veo3-no-audio tool
-type GenerateVideoVeo3NoAudioParams = GenerateVideoVeo3Params
+type GenerateVideoVeo3NoAudioParams struct {
+	Prompt              string          `json:"prompt,omitempty" validate:"required_without=Image,omitempty,min=10,max=2000"`
+	Image               *MediaReference `json:"image,omitempty" validate:"required_without=Prompt"`
+	LastFrame           *MediaReference `json:"last_frame,omitempty"`
+	Seed                *int64          `json:"seed,omitempty" validate:"omitempty,min=0,max=4294967295"`
+	FPS                 int             `json:"fps,omitempty" validate:"omitempty,oneof=24 30 60"`
+	Duration            int             `json:"duration,omitempty" validate:"omitempty,min=5,max=8"`
+	Resolution          string          `json:"resolution,omitempty" validate:"omitempty,oneof=720p 1080p"`
+	AspectRatio         string          `json:"aspect_ratio,omitempty" validate:"omitempty,oneof=16:9 9:16"`
+	SampleCount         int             `json:"sample_count,omitempty" validate:"omitempty,min=1,max=4"`
+	EnhancePrompt       bool            `json:"enhance_prompt,omitempty"`
+	NegativePrompt      string          `json:"negative_prompt,omitempty" validate:"omitempty,max=500"`
+	PersonGeneration    string          `json:"person_generation,omitempty" validate:"omitempty,oneof=allow_adult dont_allow"`
+	CompressionQuality  string          `json:"compression_quality,omitempty" validate:"omitempty,oneof=low medium high"`
+}
 
 // === Audio Generation Tools (Lyria) ===
 

@@ -45,15 +45,21 @@ type MediaGenerationResult struct {
 func NewImageGenerationResult(
 	tool string,
 	jobID string,
+	userID string,
+	conversationID string,
+	messageID string,
 	assets []MediaAsset,
 	prompt string,
 	model string,
 	meta ExecutionMetadata,
 ) *ToolResult {
 	return &ToolResult{
-		Success: true,
-		Tool:    tool,
-		JobID:   jobID,
+		Success:        true,
+		Tool:           tool,
+		JobID:          jobID,
+		UserID:         userID,
+		ConversationID: conversationID,
+		MessageID:      messageID,
 		MediaGeneration: &MediaGenerationResult{
 			Assets:         assets,
 			Prompt:         prompt,
@@ -69,6 +75,9 @@ func NewImageGenerationResult(
 func NewVideoGenerationResult(
 	tool string,
 	jobID string,
+	userID string,
+	conversationID string,
+	messageID string,
 	asset MediaAsset,
 	prompt string,
 	model string,
@@ -76,9 +85,12 @@ func NewVideoGenerationResult(
 	meta ExecutionMetadata,
 ) *ToolResult {
 	return &ToolResult{
-		Success: true,
-		Tool:    tool,
-		JobID:   jobID,
+		Success:        true,
+		Tool:           tool,
+		JobID:          jobID,
+		UserID:         userID,
+		ConversationID: conversationID,
+		MessageID:      messageID,
 		MediaGeneration: &MediaGenerationResult{
 			Assets:         []MediaAsset{asset},
 			Prompt:         prompt,
@@ -95,15 +107,21 @@ func NewVideoGenerationResult(
 func NewAudioGenerationResult(
 	tool string,
 	jobID string,
+	userID string,
+	conversationID string,
+	messageID string,
 	assets []MediaAsset,
 	prompt string,
 	model string,
 	meta ExecutionMetadata,
 ) *ToolResult {
 	return &ToolResult{
-		Success: true,
-		Tool:    tool,
-		JobID:   jobID,
+		Success:        true,
+		Tool:           tool,
+		JobID:          jobID,
+		UserID:         userID,
+		ConversationID: conversationID,
+		MessageID:      messageID,
 		MediaGeneration: &MediaGenerationResult{
 			Assets:         assets,
 			Prompt:         prompt,

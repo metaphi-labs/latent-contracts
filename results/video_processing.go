@@ -42,6 +42,9 @@ type ProcessingOperation struct {
 // NewTrimVideoResult creates a result for trim-video tool
 func NewTrimVideoResult(
 	jobID string,
+	userID string,
+	conversationID string,
+	messageID string,
 	outputAsset MediaAsset,
 	inputURL string,
 	startTime string,
@@ -50,9 +53,12 @@ func NewTrimVideoResult(
 	meta ExecutionMetadata,
 ) *ToolResult {
 	return &ToolResult{
-		Success: true,
-		Tool:    "trim-video",
-		JobID:   jobID,
+		Success:        true,
+		Tool:           "trim-video",
+		JobID:          jobID,
+		UserID:         userID,
+		ConversationID: conversationID,
+		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: []MediaAsset{outputAsset},
 			InputAssets: []InputReference{
@@ -80,6 +86,9 @@ func NewTrimVideoResult(
 // NewCombineVideosResult creates a result for combine-videos tool
 func NewCombineVideosResult(
 	jobID string,
+	userID string,
+	conversationID string,
+	messageID string,
 	outputAsset MediaAsset,
 	inputURLs []string,
 	transition string,
@@ -96,9 +105,12 @@ func NewCombineVideosResult(
 	}
 
 	return &ToolResult{
-		Success: true,
-		Tool:    "combine-videos",
-		JobID:   jobID,
+		Success:        true,
+		Tool:           "combine-videos",
+		JobID:          jobID,
+		UserID:         userID,
+		ConversationID: conversationID,
+		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: []MediaAsset{outputAsset},
 			InputAssets:  inputs,
@@ -121,6 +133,9 @@ func NewCombineVideosResult(
 // NewExtractFrameResult creates a result for extract-frame tool (single frame)
 func NewExtractFrameResult(
 	jobID string,
+	userID string,
+	conversationID string,
+	messageID string,
 	outputAsset MediaAsset,
 	inputVideoURL string,
 	position string,
@@ -137,9 +152,12 @@ func NewExtractFrameResult(
 	}
 
 	return &ToolResult{
-		Success: true,
-		Tool:    "extract-frame",
-		JobID:   jobID,
+		Success:        true,
+		Tool:           "extract-frame",
+		JobID:          jobID,
+		UserID:         userID,
+		ConversationID: conversationID,
+		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: []MediaAsset{outputAsset},
 			InputAssets: []InputReference{
@@ -164,6 +182,9 @@ func NewExtractFrameResult(
 // NewExtractFramesResult creates a result for extract-frame tool (batch extraction)
 func NewExtractFramesResult(
 	jobID string,
+	userID string,
+	conversationID string,
+	messageID string,
 	outputAssets []MediaAsset,
 	inputVideoURL string,
 	positions []string,
@@ -177,9 +198,12 @@ func NewExtractFramesResult(
 	}
 
 	return &ToolResult{
-		Success: true,
-		Tool:    "extract-frame",
-		JobID:   jobID,
+		Success:        true,
+		Tool:           "extract-frame",
+		JobID:          jobID,
+		UserID:         userID,
+		ConversationID: conversationID,
+		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: outputAssets,
 			InputAssets: []InputReference{
@@ -207,6 +231,9 @@ func NewExtractFramesResult(
 // NewImageAudioMergeResult creates a result for image-audio-merge tool
 func NewImageAudioMergeResult(
 	jobID string,
+	userID string,
+	conversationID string,
+	messageID string,
 	outputAsset MediaAsset,
 	imageURL string,
 	audioURL string,
@@ -215,9 +242,12 @@ func NewImageAudioMergeResult(
 	meta ExecutionMetadata,
 ) *ToolResult {
 	return &ToolResult{
-		Success: true,
-		Tool:    "image-audio-merge",
-		JobID:   jobID,
+		Success:        true,
+		Tool:           "image-audio-merge",
+		JobID:          jobID,
+		UserID:         userID,
+		ConversationID: conversationID,
+		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: []MediaAsset{outputAsset},
 			InputAssets: []InputReference{
@@ -249,6 +279,9 @@ func NewImageAudioMergeResult(
 // NewMergeImagesResult creates a result for merge-images tool
 func NewMergeImagesResult(
 	jobID string,
+	userID string,
+	conversationID string,
+	messageID string,
 	outputAsset MediaAsset,
 	inputImageURLs []string,
 	layout string,
@@ -266,9 +299,12 @@ func NewMergeImagesResult(
 	}
 
 	return &ToolResult{
-		Success: true,
-		Tool:    "merge-images",
-		JobID:   jobID,
+		Success:        true,
+		Tool:           "merge-images",
+		JobID:          jobID,
+		UserID:         userID,
+		ConversationID: conversationID,
+		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: []MediaAsset{outputAsset},
 			InputAssets:  inputs,
@@ -293,15 +329,21 @@ func NewMergeImagesResult(
 func NewVideoProcessingError(
 	tool string,
 	jobID string,
+	userID string,
+	conversationID string,
+	messageID string,
 	code string,
 	message string,
 	retryable bool,
 	meta ExecutionMetadata,
 ) *ToolResult {
 	return &ToolResult{
-		Success: false,
-		Tool:    tool,
-		JobID:   jobID,
+		Success:        false,
+		Tool:           tool,
+		JobID:          jobID,
+		UserID:         userID,
+		ConversationID: conversationID,
+		MessageID:      messageID,
 		Error: &ErrorInfo{
 			Code:      code,
 			Message:   message,

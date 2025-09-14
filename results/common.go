@@ -15,10 +15,14 @@ type ToolResult struct {
 	Tool    string `json:"tool"`
 	JobID   string `json:"job_id"`
 
+	// Context fields - required for Platform API
+	UserID         string `json:"user_id"`
+	ConversationID string `json:"conversation_id"`
+	MessageID      string `json:"message_id,omitempty"` // Optional: assistant message that triggered the tool
+
 	// Result payload - exactly one of these based on tool category
 	MediaGeneration  *MediaGenerationResult  `json:"media_generation,omitempty"`
 	VideoProcessing  *VideoProcessingResult  `json:"video_processing,omitempty"`
-	ContentAnalysis  *ContentAnalysisResult  `json:"content_analysis,omitempty"`
 
 	// Error information if Success is false
 	Error *ErrorInfo `json:"error,omitempty"`
@@ -78,9 +82,7 @@ type ExecutionMetadata struct {
 	Region        string `json:"region,omitempty"`
 
 	// Request tracking
-	RequestID      string `json:"request_id"`
-	ConversationID string `json:"conversation_id"`
-	UserID         string `json:"user_id"`
+	RequestID string `json:"request_id"`
 }
 
 // Validation methods
@@ -93,6 +95,12 @@ func (r *ToolResult) Validate() error {
 	if r.JobID == "" {
 		return fmt.Errorf("job ID is required")
 	}
+	if r.UserID == "" {
+		return fmt.Errorf("user ID is required")
+	}
+	if r.ConversationID == "" {
+		return fmt.Errorf("conversation ID is required")
+	}
 
 	if r.Success {
 		// Must have exactly one result type
@@ -101,9 +109,6 @@ func (r *ToolResult) Validate() error {
 			count++
 		}
 		if r.VideoProcessing != nil {
-			count++
-		}
-		if r.ContentAnalysis != nil {
 			count++
 		}
 		if count != 1 {

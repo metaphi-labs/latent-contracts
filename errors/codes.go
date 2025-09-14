@@ -97,18 +97,45 @@ const (
 const (
 	// VAL_INVALID_REQUEST indicates malformed request structure
 	VAL_INVALID_REQUEST ErrorCode = "VAL_INVALID_REQUEST"
-	
+
 	// VAL_MISSING_PARAMETER indicates required parameter is missing
 	VAL_MISSING_PARAMETER ErrorCode = "VAL_MISSING_PARAMETER"
-	
+
 	// VAL_INVALID_PARAMETER indicates parameter value is invalid
 	VAL_INVALID_PARAMETER ErrorCode = "VAL_INVALID_PARAMETER"
-	
+
 	// VAL_INVALID_FORMAT indicates data format is incorrect
 	VAL_INVALID_FORMAT ErrorCode = "VAL_INVALID_FORMAT"
-	
+
 	// VAL_OUT_OF_RANGE indicates value is outside acceptable range
 	VAL_OUT_OF_RANGE ErrorCode = "VAL_OUT_OF_RANGE"
+
+	// VAL_INVALID_ENUM indicates value is not in allowed set
+	VAL_INVALID_ENUM ErrorCode = "VAL_INVALID_ENUM"
+
+	// VAL_STRING_TOO_LONG indicates string exceeds max length
+	VAL_STRING_TOO_LONG ErrorCode = "VAL_STRING_TOO_LONG"
+
+	// VAL_STRING_TOO_SHORT indicates string below min length
+	VAL_STRING_TOO_SHORT ErrorCode = "VAL_STRING_TOO_SHORT"
+
+	// VAL_ARRAY_TOO_LONG indicates array exceeds max items
+	VAL_ARRAY_TOO_LONG ErrorCode = "VAL_ARRAY_TOO_LONG"
+
+	// VAL_ARRAY_TOO_SHORT indicates array below min items
+	VAL_ARRAY_TOO_SHORT ErrorCode = "VAL_ARRAY_TOO_SHORT"
+
+	// VAL_INVALID_URL indicates URL format is invalid
+	VAL_INVALID_URL ErrorCode = "VAL_INVALID_URL"
+
+	// VAL_INVALID_PATTERN indicates value doesn't match required pattern
+	VAL_INVALID_PATTERN ErrorCode = "VAL_INVALID_PATTERN"
+
+	// VAL_MUTUALLY_EXCLUSIVE indicates conflicting parameters provided
+	VAL_MUTUALLY_EXCLUSIVE ErrorCode = "VAL_MUTUALLY_EXCLUSIVE"
+
+	// VAL_DEPENDENCY_MISSING indicates required dependent parameter missing
+	VAL_DEPENDENCY_MISSING ErrorCode = "VAL_DEPENDENCY_MISSING"
 )
 
 // System and Infrastructure Errors

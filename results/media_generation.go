@@ -3,13 +3,17 @@ package results
 import (
 	"fmt"
 	"time"
+
+	"github.com/metaphi-labs/latent-contracts/types"
 )
 
 // MediaGenerationResult for image/video/audio generation tools
 // Used by: generate-image-imagen, generate-video-veo3, generate-music-lyria, nano-banana, etc.
 type MediaGenerationResult struct {
-	// Generated assets
-	Assets []MediaAsset `json:"assets"`
+	// Generated assets - use specific output types
+	Images []types.OutputImage `json:"images,omitempty"`
+	Videos []types.OutputVideo `json:"videos,omitempty"`
+	Audio  []types.OutputAudio `json:"audio,omitempty"`
 
 	// Generation parameters that were actually used
 	Prompt string `json:"prompt"`
@@ -48,7 +52,7 @@ func NewImageGenerationResult(
 	userID string,
 	conversationID string,
 	messageID string,
-	assets []MediaAsset,
+	images []types.OutputImage,
 	prompt string,
 	model string,
 	meta ExecutionMetadata,
@@ -61,11 +65,11 @@ func NewImageGenerationResult(
 		ConversationID: conversationID,
 		MessageID:      messageID,
 		MediaGeneration: &MediaGenerationResult{
-			Assets:         assets,
+			Images:         images,
 			Prompt:         prompt,
 			Model:          model,
-			TotalRequested: len(assets),
-			TotalGenerated: len(assets),
+			TotalRequested: len(images),
+			TotalGenerated: len(images),
 		},
 		Metadata: meta,
 	}
@@ -78,7 +82,7 @@ func NewVideoGenerationResult(
 	userID string,
 	conversationID string,
 	messageID string,
-	asset MediaAsset,
+	video types.OutputVideo,
 	prompt string,
 	model string,
 	audioGenerated bool,
@@ -92,7 +96,7 @@ func NewVideoGenerationResult(
 		ConversationID: conversationID,
 		MessageID:      messageID,
 		MediaGeneration: &MediaGenerationResult{
-			Assets:         []MediaAsset{asset},
+			Videos:         []types.OutputVideo{video},
 			Prompt:         prompt,
 			Model:          model,
 			AudioGenerated: &audioGenerated,
@@ -110,7 +114,7 @@ func NewAudioGenerationResult(
 	userID string,
 	conversationID string,
 	messageID string,
-	assets []MediaAsset,
+	audio []types.OutputAudio,
 	prompt string,
 	model string,
 	meta ExecutionMetadata,
@@ -123,11 +127,11 @@ func NewAudioGenerationResult(
 		ConversationID: conversationID,
 		MessageID:      messageID,
 		MediaGeneration: &MediaGenerationResult{
-			Assets:         assets,
+			Audio:          audio,
 			Prompt:         prompt,
 			Model:          model,
-			TotalRequested: len(assets),
-			TotalGenerated: len(assets),
+			TotalRequested: len(audio),
+			TotalGenerated: len(audio),
 		},
 		Metadata: meta,
 	}
@@ -157,7 +161,8 @@ func NewMediaGenerationError(
 
 // Validate ensures media generation result is well-formed
 func (m *MediaGenerationResult) Validate() error {
-	if len(m.Assets) == 0 {
+	// Must have at least one type of media
+	if len(m.Images) == 0 && len(m.Videos) == 0 && len(m.Audio) == 0 {
 		return fmt.Errorf("media generation must have at least one asset")
 	}
 
@@ -169,10 +174,33 @@ func (m *MediaGenerationResult) Validate() error {
 		return fmt.Errorf("model is required for media generation")
 	}
 
-	// Validate each asset
-	for i, asset := range m.Assets {
-		if err := ValidateMediaAsset(asset, i); err != nil {
-			return err
+	// Validate each image
+	for i, img := range m.Images {
+		if img.StorageURL == "" {
+			return fmt.Errorf("image %d missing storage URL", i)
+		}
+		if img.PublicURL == "" {
+			return fmt.Errorf("image %d missing public URL", i)
+		}
+	}
+
+	// Validate each video
+	for i, vid := range m.Videos {
+		if vid.StorageURL == "" {
+			return fmt.Errorf("video %d missing storage URL", i)
+		}
+		if vid.PublicURL == "" {
+			return fmt.Errorf("video %d missing public URL", i)
+		}
+	}
+
+	// Validate each audio
+	for i, aud := range m.Audio {
+		if aud.StorageURL == "" {
+			return fmt.Errorf("audio %d missing storage URL", i)
+		}
+		if aud.PublicURL == "" {
+			return fmt.Errorf("audio %d missing public URL", i)
 		}
 	}
 

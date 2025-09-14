@@ -41,6 +41,10 @@ type MediaAsset struct {
 	StorageURL string `json:"storage_url"` // gs://bucket/path for persistence
 	PublicURL  string `json:"public_url"`  // https:// URL for access
 
+	// Signed URLs - Platform API adds these for temporary access
+	SignedURL    *string    `json:"signed_url,omitempty"`    // Signed URL with expiration
+	SignedExpiry *time.Time `json:"signed_expiry,omitempty"` // When the signed URL expires
+
 	// Media properties
 	MimeType string `json:"mime_type"`
 	FileSize int64  `json:"file_size_bytes"`

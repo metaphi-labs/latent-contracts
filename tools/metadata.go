@@ -110,15 +110,21 @@ var Metadata = map[ToolName]ToolMeta{
 		EndpointPath: "/api/generate-image-flash/generate/async",
 	},
 
-	GeneralImageFlash: {
-		Name:         GeneralImageFlash,
+	NanoBanana: {
+		Name:         NanoBanana,
 		Credits:      3,
 		Type:         ToolTypeMedia,
 		ServiceType:  ServiceTypeMediaAI,
-		Description:  "Context aware image generator and editor. It can also merge images to create a composite image",
-		Examples:     []string{},
+		Description:  "Versatile image generation with Gemini 2.5 Flash Image Preview. Supports text-to-image, image editing, style transfer, and multi-image composition. Best for creative editing and conversational image generation.",
+		Examples: []string{
+			"Create a photorealistic portrait of an elderly Japanese ceramicist",
+			"Edit this image to add a sunset background",
+			"Combine these three images into a creative composition",
+			"Apply the style of this painting to my photo",
+			"Transform this sketch into a detailed illustration",
+		},
 		OutputType:   OutputTypeImage,
-		EndpointPath: "/api/general-image-flash/generate/async",
+		EndpointPath: "/api/nano-banana/generate/async",
 	},
 
 	GenerateVideoVeo3: {

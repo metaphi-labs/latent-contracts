@@ -75,26 +75,27 @@ type GenerateImageFlashParams struct {
 	Height int    `json:"height,omitempty"`
 }
 
-// NanoBananaParams for nano-banana tool (Gemini 2.5 Flash multimodal)
+// NanoBananaParams for nano-banana tool (Gemini 2.5 Flash Image Preview)
+// Supports native image generation, editing, style transfer, and multi-image composition
 type NanoBananaParams struct {
-	// Core generation/analysis prompt
+	// Core generation prompt (required for image generation)
 	Prompt string `json:"prompt" validate:"required,min=1,max=8000"`
 
-	// Multimodal inputs
-	Images  []string         `json:"images,omitempty" validate:"omitempty,max=16"`  // Input images (GCS URLs or signed URLs)
-	Context []ContextMessage `json:"context,omitempty" validate:"omitempty,max=10"` // Conversation history
+	// Input images for editing, style transfer, or composition (up to 3 recommended)
+	Images  []string         `json:"images,omitempty" validate:"omitempty,max=3"`   // Input images for editing/composition
+	Context []ContextMessage `json:"context,omitempty" validate:"omitempty,max=10"` // Conversation history for multi-turn
 
-	// Generation parameters (let the model be smart)
+	// Generation parameters
 	Temperature     *float64 `json:"temperature,omitempty" validate:"omitempty,min=0,max=2"`
 	TopP            *float64 `json:"top_p,omitempty" validate:"omitempty,min=0,max=1"`
-	MaxOutputTokens *int32   `json:"max_output_tokens,omitempty" validate:"omitempty,min=1,max=32768"`
+	NumberOfImages  int      `json:"number_of_images,omitempty" validate:"omitempty,min=1,max=4"`
 
-
-	// Safety (optional, Flash is generally safe)
+	// Safety settings
 	SafetyFilterLevel string `json:"safety_filter_level,omitempty" validate:"omitempty,oneof=BLOCK_NONE BLOCK_ONLY_HIGH BLOCK_MEDIUM_AND_ABOVE"`
 
 	// Additional control
-	Seed *int64 `json:"seed,omitempty" validate:"omitempty,min=0,max=4294967295"`
+	Seed     *int64 `json:"seed,omitempty" validate:"omitempty,min=0,max=4294967295"`
+	Language string `json:"language,omitempty" validate:"omitempty,oneof=en es-MX ja-JP zh-CN hi-IN"` // Best results with these languages
 }
 
 // Validate ensures NanoBananaParams is well-formed

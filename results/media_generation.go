@@ -94,7 +94,7 @@ func NewVideoGenerationResult(
 func NewAudioGenerationResult(
 	tool string,
 	jobID string,
-	asset MediaAsset,
+	assets []MediaAsset,
 	prompt string,
 	model string,
 	meta ExecutionMetadata,
@@ -104,11 +104,11 @@ func NewAudioGenerationResult(
 		Tool:    tool,
 		JobID:   jobID,
 		MediaGeneration: &MediaGenerationResult{
-			Assets:         []MediaAsset{asset},
+			Assets:         assets,
 			Prompt:         prompt,
 			Model:          model,
-			TotalRequested: 1,
-			TotalGenerated: 1,
+			TotalRequested: len(assets),
+			TotalGenerated: len(assets),
 		},
 		Metadata: meta,
 	}

@@ -118,7 +118,7 @@ func NewCombineVideosResult(
 	}
 }
 
-// NewExtractFrameResult creates a result for extract-frame tool
+// NewExtractFrameResult creates a result for extract-frame tool (single frame)
 func NewExtractFrameResult(
 	jobID string,
 	outputAsset MediaAsset,
@@ -161,6 +161,49 @@ func NewExtractFrameResult(
 	}
 }
 
+// NewExtractFramesResult creates a result for extract-frame tool (batch extraction)
+func NewExtractFramesResult(
+	jobID string,
+	outputAssets []MediaAsset,
+	inputVideoURL string,
+	positions []string,
+	processingTime float64,
+	meta ExecutionMetadata,
+) *ToolResult {
+	// Calculate total output size
+	var totalOutputSize int64
+	for _, asset := range outputAssets {
+		totalOutputSize += asset.FileSize
+	}
+
+	return &ToolResult{
+		Success: true,
+		Tool:    "extract-frame",
+		JobID:   jobID,
+		VideoProcessing: &VideoProcessingResult{
+			OutputAssets: outputAssets,
+			InputAssets: []InputReference{
+				{
+					Type:      "video",
+					SourceURL: inputVideoURL,
+				},
+			},
+			Operations: []ProcessingOperation{
+				{
+					Type: "extract",
+					Parameters: map[string]interface{}{
+						"positions": positions,
+						"count":     len(positions),
+					},
+				},
+			},
+			ProcessingTime: processingTime,
+			OutputSize:     totalOutputSize,
+		},
+		Metadata: meta,
+	}
+}
+
 // NewImageAudioMergeResult creates a result for image-audio-merge tool
 func NewImageAudioMergeResult(
 	jobID string,
@@ -193,6 +236,49 @@ func NewImageAudioMergeResult(
 					Type: "merge",
 					Parameters: map[string]interface{}{
 						"output_duration": audioDuration,
+					},
+				},
+			},
+			ProcessingTime: processingTime,
+			OutputSize:     outputAsset.FileSize,
+		},
+		Metadata: meta,
+	}
+}
+
+// NewMergeImagesResult creates a result for merge-images tool
+func NewMergeImagesResult(
+	jobID string,
+	outputAsset MediaAsset,
+	inputImageURLs []string,
+	layout string,
+	spacing int,
+	processingTime float64,
+	meta ExecutionMetadata,
+) *ToolResult {
+	// Build input references
+	inputs := make([]InputReference, len(inputImageURLs))
+	for i, url := range inputImageURLs {
+		inputs[i] = InputReference{
+			Type:      "image",
+			SourceURL: url,
+		}
+	}
+
+	return &ToolResult{
+		Success: true,
+		Tool:    "merge-images",
+		JobID:   jobID,
+		VideoProcessing: &VideoProcessingResult{
+			OutputAssets: []MediaAsset{outputAsset},
+			InputAssets:  inputs,
+			Operations: []ProcessingOperation{
+				{
+					Type: "merge",
+					Parameters: map[string]interface{}{
+						"layout":  layout,
+						"spacing": spacing,
+						"count":   len(inputImageURLs),
 					},
 				},
 			},

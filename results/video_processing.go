@@ -5,13 +5,16 @@ import (
 	"time"
 
 	"github.com/metaphi-labs/latent-contracts/errors"
+	"github.com/metaphi-labs/latent-contracts/types"
 )
 
 // VideoProcessingResult for video manipulation tools
 // Used by: combine-videos, trim-video, extract-frame, image-audio-merge, etc.
 type VideoProcessingResult struct {
-	// Output assets
-	OutputAssets []MediaAsset `json:"output_assets"`
+	// Output assets - use the same types as MediaGenerationResult for consistency
+	Images []types.OutputImage `json:"images,omitempty"` // For extract-frame producing images
+	Videos []types.OutputVideo `json:"videos,omitempty"` // For trim, combine producing videos
+	Audio  []types.OutputAudio `json:"audio,omitempty"`  // For audio extraction/processing
 
 	// Input references (what was processed)
 	InputAssets []InputReference `json:"input_assets"`
@@ -43,7 +46,7 @@ type ProcessingOperation struct {
 
 // NewTrimVideoResult creates a result for trim-video tool
 func NewTrimVideoResult(
-	outputAsset MediaAsset,
+	outputVideo types.OutputVideo,
 	inputURL string,
 	startTime string,
 	endTime string,
@@ -54,7 +57,7 @@ func NewTrimVideoResult(
 		Success:        true,
 		Tool:           "trim-video",
 		VideoProcessing: &VideoProcessingResult{
-			OutputAssets: []MediaAsset{outputAsset},
+			Videos: []types.OutputVideo{outputVideo},
 			InputAssets: []InputReference{
 				{
 					Type:      "video",
@@ -71,14 +74,14 @@ func NewTrimVideoResult(
 				},
 			},
 			ProcessingTime: processingTime,
-			OutputSize:     outputAsset.FileSize,
 		},
 		Metadata: meta,
 	}
 }
+
 // NewCombineVideosResult creates a result for combine-videos tool
 func NewCombineVideosResult(
-	outputAsset MediaAsset,
+	outputVideo types.OutputVideo,
 	inputURLs []string,
 	transition string,
 	processingTime float64,
@@ -96,8 +99,8 @@ func NewCombineVideosResult(
 		Success:        true,
 		Tool:           "combine-videos",
 		VideoProcessing: &VideoProcessingResult{
-			OutputAssets: []MediaAsset{outputAsset},
-			InputAssets:  inputs,
+			Videos:      []types.OutputVideo{outputVideo},
+			InputAssets: inputs,
 			Operations: []ProcessingOperation{
 				{
 					Type: "combine",
@@ -108,14 +111,14 @@ func NewCombineVideosResult(
 				},
 			},
 			ProcessingTime: processingTime,
-			OutputSize:     outputAsset.FileSize,
 		},
 		Metadata: meta,
 	}
 }
+
 // NewExtractFrameResult creates a result for extract-frame tool (single frame)
 func NewExtractFrameResult(
-	outputAsset MediaAsset,
+	outputImage types.OutputImage,
 	inputVideoURL string,
 	position string,
 	timestamp string,
@@ -133,7 +136,7 @@ func NewExtractFrameResult(
 		Success:        true,
 		Tool:           "extract-frame",
 		VideoProcessing: &VideoProcessingResult{
-			OutputAssets: []MediaAsset{outputAsset},
+			Images: []types.OutputImage{outputImage},
 			InputAssets: []InputReference{
 				{
 					Type:      "video",
@@ -147,29 +150,24 @@ func NewExtractFrameResult(
 				},
 			},
 			ProcessingTime: processingTime,
-			OutputSize:     outputAsset.FileSize,
 		},
 		Metadata: meta,
 	}
 }
+
 // NewExtractFramesResult creates a result for extract-frame tool (batch extraction)
 func NewExtractFramesResult(
-	outputAssets []MediaAsset,
+	outputImages []types.OutputImage,
 	inputVideoURL string,
 	positions []string,
 	processingTime float64,
 	meta ExecutionMetadata,
 ) *ToolResult {
-	// Calculate total output size
-	var totalOutputSize int64
-	for _, asset := range outputAssets {
-		totalOutputSize += asset.FileSize
-	}
 	return &ToolResult{
 		Success:        true,
 		Tool:           "extract-frame",
 		VideoProcessing: &VideoProcessingResult{
-			OutputAssets: outputAssets,
+			Images:      outputImages,
 			InputAssets: []InputReference{
 				{
 					Type:      "video",
@@ -186,14 +184,14 @@ func NewExtractFramesResult(
 				},
 			},
 			ProcessingTime: processingTime,
-			OutputSize:     totalOutputSize,
 		},
 		Metadata: meta,
 	}
 }
+
 // NewImageAudioMergeResult creates a result for image-audio-merge tool
 func NewImageAudioMergeResult(
-	outputAsset MediaAsset,
+	outputVideo types.OutputVideo,
 	imageURL string,
 	audioURL string,
 	audioDuration float64,
@@ -204,7 +202,7 @@ func NewImageAudioMergeResult(
 		Success:        true,
 		Tool:           "image-audio-merge",
 		VideoProcessing: &VideoProcessingResult{
-			OutputAssets: []MediaAsset{outputAsset},
+			Videos: []types.OutputVideo{outputVideo},
 			InputAssets: []InputReference{
 				{
 					Type:      "image",
@@ -225,14 +223,14 @@ func NewImageAudioMergeResult(
 				},
 			},
 			ProcessingTime: processingTime,
-			OutputSize:     outputAsset.FileSize,
 		},
 		Metadata: meta,
 	}
 }
+
 // NewMergeImagesResult creates a result for merge-images tool
 func NewMergeImagesResult(
-	outputAsset MediaAsset,
+	outputImage types.OutputImage,
 	inputImageURLs []string,
 	layout string,
 	spacing int,
@@ -251,8 +249,8 @@ func NewMergeImagesResult(
 		Success:        true,
 		Tool:           "merge-images",
 		VideoProcessing: &VideoProcessingResult{
-			OutputAssets: []MediaAsset{outputAsset},
-			InputAssets:  inputs,
+			Images:      []types.OutputImage{outputImage},
+			InputAssets: inputs,
 			Operations: []ProcessingOperation{
 				{
 					Type: "merge",
@@ -264,11 +262,11 @@ func NewMergeImagesResult(
 				},
 			},
 			ProcessingTime: processingTime,
-			OutputSize:     outputAsset.FileSize,
 		},
 		Metadata: meta,
 	}
 }
+
 // NewVideoProcessingError creates an error result for video processing
 func NewVideoProcessingError(
 	tool string,
@@ -285,23 +283,23 @@ func NewVideoProcessingError(
 		Metadata: meta,
 	}
 }
+
 // Validate ensures video processing result is well-formed
 func (v *VideoProcessingResult) Validate() error {
-	if len(v.OutputAssets) == 0 {
+	// Check that at least one output type has content
+	totalOutputs := len(v.Images) + len(v.Videos) + len(v.Audio)
+	if totalOutputs == 0 {
 		return fmt.Errorf("video processing must have at least one output asset")
 	}
+
 	if len(v.InputAssets) == 0 {
 		return fmt.Errorf("video processing must have at least one input asset")
 	}
+
 	if len(v.Operations) == 0 {
 		return fmt.Errorf("video processing must specify at least one operation")
 	}
-	// Validate output assets
-	for i, asset := range v.OutputAssets {
-		if err := ValidateMediaAsset(asset, i); err != nil {
-			return fmt.Errorf("output %s", err)
-		}
-	}
+
 	// Validate input references
 	for i, input := range v.InputAssets {
 		if input.SourceURL == "" {
@@ -311,8 +309,10 @@ func (v *VideoProcessingResult) Validate() error {
 			return fmt.Errorf("input[%d]: type is required", i)
 		}
 	}
+
 	return nil
 }
+
 // Helper to create execution metadata for Video Processor
 func NewVideoProcessorMetadata(
 	startTime time.Time,
@@ -326,8 +326,10 @@ func NewVideoProcessorMetadata(
 		StartTime:      startTime,
 		EndTime:        endTime,
 		DurationMs:     endTime.Sub(startTime).Milliseconds(),
+		CreatedAt:      time.Now(), // Add CreatedAt field
 		CreditsUsed:    creditsUsed,
 		Provider:       "video-processor",
+		Model:          "ffmpeg", // Add Model field for consistency
 		RequestID:      requestID,
 	}
 }

@@ -77,6 +77,7 @@ type ExecutionMetadata struct {
 
 	// Provider info
 	Provider      string `json:"provider"`                // "vertex-ai", "openai", etc
+	Model         string `json:"model"`                    // The model used for execution
 	ProviderJobID string `json:"provider_job_id,omitempty"`
 	Region        string `json:"region,omitempty"`
 

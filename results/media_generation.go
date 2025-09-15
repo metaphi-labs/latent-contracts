@@ -48,10 +48,6 @@ type MediaGenerationResult struct {
 // NewImageGenerationResult creates a result for Imagen tools
 func NewImageGenerationResult(
 	tool string,
-	jobID string,
-	userID string,
-	conversationID string,
-	messageID string,
 	images []types.OutputImage,
 	prompt string,
 	model string,
@@ -60,10 +56,6 @@ func NewImageGenerationResult(
 	return &ToolResult{
 		Success:        true,
 		Tool:           tool,
-		JobID:          jobID,
-		UserID:         userID,
-		ConversationID: conversationID,
-		MessageID:      messageID,
 		MediaGeneration: &MediaGenerationResult{
 			Images:         images,
 			Prompt:         prompt,
@@ -78,10 +70,6 @@ func NewImageGenerationResult(
 // NewVideoGenerationResult creates a result for Veo tools
 func NewVideoGenerationResult(
 	tool string,
-	jobID string,
-	userID string,
-	conversationID string,
-	messageID string,
 	video types.OutputVideo,
 	prompt string,
 	model string,
@@ -91,10 +79,6 @@ func NewVideoGenerationResult(
 	return &ToolResult{
 		Success:        true,
 		Tool:           tool,
-		JobID:          jobID,
-		UserID:         userID,
-		ConversationID: conversationID,
-		MessageID:      messageID,
 		MediaGeneration: &MediaGenerationResult{
 			Videos:         []types.OutputVideo{video},
 			Prompt:         prompt,
@@ -110,10 +94,6 @@ func NewVideoGenerationResult(
 // NewAudioGenerationResult creates a result for Lyria tools
 func NewAudioGenerationResult(
 	tool string,
-	jobID string,
-	userID string,
-	conversationID string,
-	messageID string,
 	audio []types.OutputAudio,
 	prompt string,
 	model string,
@@ -122,10 +102,6 @@ func NewAudioGenerationResult(
 	return &ToolResult{
 		Success:        true,
 		Tool:           tool,
-		JobID:          jobID,
-		UserID:         userID,
-		ConversationID: conversationID,
-		MessageID:      messageID,
 		MediaGeneration: &MediaGenerationResult{
 			Audio:          audio,
 			Prompt:         prompt,
@@ -140,7 +116,6 @@ func NewAudioGenerationResult(
 // NewMediaGenerationError creates an error result for media generation
 func NewMediaGenerationError(
 	tool string,
-	jobID string,
 	code string,
 	message string,
 	retryable bool,
@@ -149,7 +124,6 @@ func NewMediaGenerationError(
 	return &ToolResult{
 		Success: false,
 		Tool:    tool,
-		JobID:   jobID,
 		Error: &ErrorInfo{
 			Code:      code,
 			Message:   message,

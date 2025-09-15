@@ -5,6 +5,8 @@ package results
 import (
 	"fmt"
 	"time"
+
+	"github.com/metaphi-labs/latent-contracts/errors"
 )
 
 // ToolResult is the standard response format for ALL tool executions
@@ -19,7 +21,7 @@ type ToolResult struct {
 	VideoProcessing  *VideoProcessingResult  `json:"video_processing,omitempty"`
 
 	// Error information if Success is false
-	Error *ErrorInfo `json:"error,omitempty"`
+	Error *errors.ServiceError `json:"error,omitempty"`
 
 	// Execution metadata
 	Metadata ExecutionMetadata `json:"metadata"`
@@ -53,15 +55,6 @@ type MediaAsset struct {
 
 	// Optional
 	ThumbnailURL *string `json:"thumbnail_url,omitempty"`
-}
-
-// ErrorInfo when Success is false
-type ErrorInfo struct {
-	Code       string      `json:"code"`    // Standardized error code from errors package
-	Message    string      `json:"message"` // Human-readable message
-	Retryable  bool        `json:"retryable"`
-	RetryAfter *time.Time  `json:"retry_after,omitempty"`
-	Details    interface{} `json:"details,omitempty"`
 }
 
 // ExecutionMetadata about the tool execution

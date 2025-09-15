@@ -3,6 +3,8 @@ package results
 import (
 	"fmt"
 	"time"
+
+	"github.com/metaphi-labs/latent-contracts/errors"
 )
 
 // VideoProcessingResult for video manipulation tools
@@ -270,19 +272,16 @@ func NewMergeImagesResult(
 // NewVideoProcessingError creates an error result for video processing
 func NewVideoProcessingError(
 	tool string,
-	code string,
+	code errors.ErrorCode,
 	message string,
+	service string,
 	retryable bool,
 	meta ExecutionMetadata,
 ) *ToolResult {
 	return &ToolResult{
 		Success:        false,
 		Tool:           tool,
-		Error: &ErrorInfo{
-			Code:      code,
-			Message:   message,
-			Retryable: retryable,
-		},
+		Error: errors.NewServiceError(code, message, service, retryable),
 		Metadata: meta,
 	}
 }

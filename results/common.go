@@ -10,15 +10,9 @@ import (
 // ToolResult is the standard response format for ALL tool executions
 // Services create this directly with the appropriate result type
 type ToolResult struct {
-	// Core fields - always required
+	// Core business fields
 	Success bool   `json:"success"`
-	Tool    string `json:"tool"`
-	JobID   string `json:"job_id"`
-
-	// Context fields - required for Platform API
-	UserID         string `json:"user_id"`
-	ConversationID string `json:"conversation_id"`
-	MessageID      string `json:"message_id,omitempty"` // Optional: assistant message that triggered the tool
+	Tool    string `json:"tool"` // Keeping tool for business identity
 
 	// Result payload - exactly one of these based on tool category
 	MediaGeneration  *MediaGenerationResult  `json:"media_generation,omitempty"`
@@ -96,15 +90,6 @@ type ExecutionMetadata struct {
 func (r *ToolResult) Validate() error {
 	if r.Tool == "" {
 		return fmt.Errorf("tool name is required")
-	}
-	if r.JobID == "" {
-		return fmt.Errorf("job ID is required")
-	}
-	if r.UserID == "" {
-		return fmt.Errorf("user ID is required")
-	}
-	if r.ConversationID == "" {
-		return fmt.Errorf("conversation ID is required")
 	}
 
 	if r.Success {

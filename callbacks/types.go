@@ -6,7 +6,7 @@ import (
 )
 
 // CallbackRequest represents what external services send back to Platform API
-// Services (Media AI, Video Processor) send strongly-typed ToolResult directly
+// Contains transport/routing metadata plus the business ToolResult
 type CallbackRequest struct {
 	// Operational metadata (routing and context)
 	JobID          string `json:"job_id" binding:"required"`
@@ -18,10 +18,10 @@ type CallbackRequest struct {
 	// Status of the operation
 	Status string `json:"status" binding:"required"` // "completed" | "failed" | "processing" | "partial"
 
-	// Result payload - strongly typed from contracts
+	// Result payload - business data only (no transport fields)
 	// For success: services create ToolResult with appropriate result type (MediaGeneration, VideoProcessing, etc)
 	// For failure: services set Error field instead
-	Result *results.ToolResult     `json:"result,omitempty"` // Strongly-typed result for successful completion
+	Result *results.ToolResult     `json:"result,omitempty"` // Business result without transport metadata
 	Error  *errors.ServiceError    `json:"error,omitempty"`  // Rich error for failures
 }
 

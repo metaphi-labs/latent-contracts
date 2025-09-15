@@ -51,6 +51,24 @@ type ExtractFrameParams struct {
 	Height    int      `json:"height,omitempty" validate:"omitempty,min=1"`
 }
 
+// ImagesToVideoParams for images-to-video tool (slideshow/sequence)
+type ImagesToVideoParams struct {
+	ImageURLs      []string `json:"image_urls" validate:"required,min=1,max=100"`
+	SignedURLs     []string `json:"signed_urls,omitempty"` // Platform API adds these
+	ImageIDs       []string `json:"image_ids,omitempty"`  // For tracking source images
+	Duration       float64  `json:"duration,omitempty" validate:"omitempty,min=0.1,max=10"` // Duration per image in seconds
+	Transition     string   `json:"transition,omitempty" validate:"omitempty,oneof=none fade crossfade slide zoom"`
+	TransitionDuration float64 `json:"transition_duration,omitempty" validate:"omitempty,min=0,max=2"`
+	AudioURL       string   `json:"audio_url,omitempty"` // Optional background audio
+	SignedAudioURL string   `json:"signed_audio_url,omitempty"`
+	Format         string   `json:"format,omitempty" validate:"omitempty,oneof=mp4 webm gif"`
+	Resolution     string   `json:"resolution,omitempty" validate:"omitempty,oneof=1920x1080 1280x720 854x480 640x360"`
+	FPS            int      `json:"fps,omitempty" validate:"omitempty,min=1,max=60"` // Frames per second
+	VideoBitrate   string   `json:"video_bitrate,omitempty" validate:"omitempty"`
+	Loop           bool     `json:"loop,omitempty"` // For GIF output
+	KenBurns       bool     `json:"ken_burns,omitempty"` // Pan and zoom effect
+}
+
 // === Image Processing Tools ===
 
 // MergeImagesParams for merge-images tool

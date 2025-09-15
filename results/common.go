@@ -66,23 +66,24 @@ type ErrorInfo struct {
 
 // ExecutionMetadata about the tool execution
 type ExecutionMetadata struct {
-	// Timing
-	StartTime  time.Time `json:"start_time"`
-	EndTime    time.Time `json:"end_time"`
-	DurationMs int64     `json:"duration_ms"`
+	// Timing (using camelCase for Platform API compatibility)
+	StartTime  time.Time `json:"startTime"`
+	EndTime    time.Time `json:"endTime"`
+	DurationMs int64     `json:"durationMs"`
+	CreatedAt  time.Time `json:"createdAt"`  // Required by Platform API storage
 
 	// Resources
-	CreditsUsed int  `json:"credits_used"`
-	TokensUsed  *int `json:"tokens_used,omitempty"`
+	CreditsUsed int  `json:"creditsUsed"`
+	TokensUsed  *int `json:"tokensUsed,omitempty"`
 
 	// Provider info
 	Provider      string `json:"provider"`                // "vertex-ai", "openai", etc
 	Model         string `json:"model"`                    // The model used for execution
-	ProviderJobID string `json:"provider_job_id,omitempty"`
+	ProviderJobID string `json:"providerJobId,omitempty"`
 	Region        string `json:"region,omitempty"`
 
 	// Request tracking
-	RequestID string `json:"request_id"`
+	RequestID string `json:"requestId"`
 }
 
 // Validation methods

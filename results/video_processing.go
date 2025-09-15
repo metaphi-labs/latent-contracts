@@ -41,10 +41,6 @@ type ProcessingOperation struct {
 
 // NewTrimVideoResult creates a result for trim-video tool
 func NewTrimVideoResult(
-	jobID string,
-	userID string,
-	conversationID string,
-	messageID string,
 	outputAsset MediaAsset,
 	inputURL string,
 	startTime string,
@@ -55,10 +51,6 @@ func NewTrimVideoResult(
 	return &ToolResult{
 		Success:        true,
 		Tool:           "trim-video",
-		JobID:          jobID,
-		UserID:         userID,
-		ConversationID: conversationID,
-		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: []MediaAsset{outputAsset},
 			InputAssets: []InputReference{
@@ -82,13 +74,8 @@ func NewTrimVideoResult(
 		Metadata: meta,
 	}
 }
-
 // NewCombineVideosResult creates a result for combine-videos tool
 func NewCombineVideosResult(
-	jobID string,
-	userID string,
-	conversationID string,
-	messageID string,
 	outputAsset MediaAsset,
 	inputURLs []string,
 	transition string,
@@ -103,14 +90,9 @@ func NewCombineVideosResult(
 			SourceURL: url,
 		}
 	}
-
 	return &ToolResult{
 		Success:        true,
 		Tool:           "combine-videos",
-		JobID:          jobID,
-		UserID:         userID,
-		ConversationID: conversationID,
-		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: []MediaAsset{outputAsset},
 			InputAssets:  inputs,
@@ -129,13 +111,8 @@ func NewCombineVideosResult(
 		Metadata: meta,
 	}
 }
-
 // NewExtractFrameResult creates a result for extract-frame tool (single frame)
 func NewExtractFrameResult(
-	jobID string,
-	userID string,
-	conversationID string,
-	messageID string,
 	outputAsset MediaAsset,
 	inputVideoURL string,
 	position string,
@@ -150,14 +127,9 @@ func NewExtractFrameResult(
 	if timestamp != "" {
 		params["timestamp"] = timestamp
 	}
-
 	return &ToolResult{
 		Success:        true,
 		Tool:           "extract-frame",
-		JobID:          jobID,
-		UserID:         userID,
-		ConversationID: conversationID,
-		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: []MediaAsset{outputAsset},
 			InputAssets: []InputReference{
@@ -178,13 +150,8 @@ func NewExtractFrameResult(
 		Metadata: meta,
 	}
 }
-
 // NewExtractFramesResult creates a result for extract-frame tool (batch extraction)
 func NewExtractFramesResult(
-	jobID string,
-	userID string,
-	conversationID string,
-	messageID string,
 	outputAssets []MediaAsset,
 	inputVideoURL string,
 	positions []string,
@@ -196,14 +163,9 @@ func NewExtractFramesResult(
 	for _, asset := range outputAssets {
 		totalOutputSize += asset.FileSize
 	}
-
 	return &ToolResult{
 		Success:        true,
 		Tool:           "extract-frame",
-		JobID:          jobID,
-		UserID:         userID,
-		ConversationID: conversationID,
-		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: outputAssets,
 			InputAssets: []InputReference{
@@ -227,13 +189,8 @@ func NewExtractFramesResult(
 		Metadata: meta,
 	}
 }
-
 // NewImageAudioMergeResult creates a result for image-audio-merge tool
 func NewImageAudioMergeResult(
-	jobID string,
-	userID string,
-	conversationID string,
-	messageID string,
 	outputAsset MediaAsset,
 	imageURL string,
 	audioURL string,
@@ -244,10 +201,6 @@ func NewImageAudioMergeResult(
 	return &ToolResult{
 		Success:        true,
 		Tool:           "image-audio-merge",
-		JobID:          jobID,
-		UserID:         userID,
-		ConversationID: conversationID,
-		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: []MediaAsset{outputAsset},
 			InputAssets: []InputReference{
@@ -275,13 +228,8 @@ func NewImageAudioMergeResult(
 		Metadata: meta,
 	}
 }
-
 // NewMergeImagesResult creates a result for merge-images tool
 func NewMergeImagesResult(
-	jobID string,
-	userID string,
-	conversationID string,
-	messageID string,
 	outputAsset MediaAsset,
 	inputImageURLs []string,
 	layout string,
@@ -297,14 +245,9 @@ func NewMergeImagesResult(
 			SourceURL: url,
 		}
 	}
-
 	return &ToolResult{
 		Success:        true,
 		Tool:           "merge-images",
-		JobID:          jobID,
-		UserID:         userID,
-		ConversationID: conversationID,
-		MessageID:      messageID,
 		VideoProcessing: &VideoProcessingResult{
 			OutputAssets: []MediaAsset{outputAsset},
 			InputAssets:  inputs,
@@ -324,14 +267,9 @@ func NewMergeImagesResult(
 		Metadata: meta,
 	}
 }
-
 // NewVideoProcessingError creates an error result for video processing
 func NewVideoProcessingError(
 	tool string,
-	jobID string,
-	userID string,
-	conversationID string,
-	messageID string,
 	code string,
 	message string,
 	retryable bool,
@@ -340,10 +278,6 @@ func NewVideoProcessingError(
 	return &ToolResult{
 		Success:        false,
 		Tool:           tool,
-		JobID:          jobID,
-		UserID:         userID,
-		ConversationID: conversationID,
-		MessageID:      messageID,
 		Error: &ErrorInfo{
 			Code:      code,
 			Message:   message,
@@ -352,28 +286,23 @@ func NewVideoProcessingError(
 		Metadata: meta,
 	}
 }
-
 // Validate ensures video processing result is well-formed
 func (v *VideoProcessingResult) Validate() error {
 	if len(v.OutputAssets) == 0 {
 		return fmt.Errorf("video processing must have at least one output asset")
 	}
-
 	if len(v.InputAssets) == 0 {
 		return fmt.Errorf("video processing must have at least one input asset")
 	}
-
 	if len(v.Operations) == 0 {
 		return fmt.Errorf("video processing must specify at least one operation")
 	}
-
 	// Validate output assets
 	for i, asset := range v.OutputAssets {
 		if err := ValidateMediaAsset(asset, i); err != nil {
 			return fmt.Errorf("output %s", err)
 		}
 	}
-
 	// Validate input references
 	for i, input := range v.InputAssets {
 		if input.SourceURL == "" {
@@ -383,10 +312,8 @@ func (v *VideoProcessingResult) Validate() error {
 			return fmt.Errorf("input[%d]: type is required", i)
 		}
 	}
-
 	return nil
 }
-
 // Helper to create execution metadata for Video Processor
 func NewVideoProcessorMetadata(
 	startTime time.Time,

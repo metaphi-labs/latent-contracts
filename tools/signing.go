@@ -9,6 +9,7 @@ var SignableFields = map[ToolName][]string{
 	ImageAudioMerge: {"image_url", "audio_url"},
 	ExtractFrame:    {"video_url"},
 	MergeImages:     {"images"},
+	ImagesToVideo:   {"image_urls", "audio_url"},
 }
 
 // NeedsSignedURLs checks if a tool requires URL signing

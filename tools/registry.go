@@ -26,6 +26,7 @@ const (
 	ImageAudioMerge  ToolName = "image-audio-merge"
 	ExtractFrame     ToolName = "extract-frame"
 	MergeImages      ToolName = "merge-images"
+	ImagesToVideo    ToolName = "images-to-video"
 
 	// Content Analysis Tools
 	ContentAnalyzer ToolName = "content-analyzer"
@@ -140,6 +141,13 @@ func ParseAndValidateParams(toolName string, params map[string]interface{}) erro
 		}
 		return p.Validate()
 
+	case ImagesToVideo:
+		var p ImagesToVideoParams
+		if err := json.Unmarshal(jsonBytes, &p); err != nil {
+			return fmt.Errorf("invalid params for %s: %w", toolName, err)
+		}
+		return p.Validate()
+
 	case ContentAnalyzer:
 		var p ContentAnalyzerParams
 		if err := json.Unmarshal(jsonBytes, &p); err != nil {
@@ -166,7 +174,7 @@ func IsValidToolName(name string) bool {
 		NanoBanana,
 		GenerateVideoVeo3, GenerateVideoVeo3Fast, GenerateVideoVeo3FastNoAudio, GenerateVideoVeo3NoAudio,
 		GenerateMusicLyria,
-		CombineVideos, TrimVideo, ImageAudioMerge, ExtractFrame, MergeImages,
+		CombineVideos, TrimVideo, ImageAudioMerge, ExtractFrame, MergeImages, ImagesToVideo,
 		ContentAnalyzer, GoogleSearch:
 		return true
 	default:

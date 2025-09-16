@@ -118,6 +118,13 @@ func (p MergeImagesParams) Validate() error {
 	return nil
 }
 
+func (p ImagesToVideoParams) Validate() error {
+	if err := validate.Struct(p); err != nil {
+		return fmt.Errorf("validation failed: %w", err)
+	}
+	return nil
+}
+
 // Validate implementations for Content Analysis tools
 
 func (p ContentAnalyzerParams) Validate() error {

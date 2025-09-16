@@ -48,6 +48,8 @@ func GetJSONSchema(toolName ToolName) (map[string]interface{}, error) {
 		schema = reflector.Reflect(&ExtractFrameParams{})
 	case MergeImages:
 		schema = reflector.Reflect(&MergeImagesParams{})
+	case ImagesToVideo:
+		schema = reflector.Reflect(&ImagesToVideoParams{})
 
 	// Content Analysis Tools
 	case ContentAnalyzer:
@@ -87,7 +89,7 @@ func GetAllSchemas() map[ToolName]map[string]interface{} {
 		NanoBanana,
 		GenerateVideoVeo3, GenerateVideoVeo3Fast, GenerateVideoVeo3FastNoAudio, GenerateVideoVeo3NoAudio,
 		GenerateMusicLyria,
-		CombineVideos, TrimVideo, ImageAudioMerge, ExtractFrame, MergeImages,
+		CombineVideos, TrimVideo, ImageAudioMerge, ExtractFrame, MergeImages, ImagesToVideo,
 		ContentAnalyzer, GoogleSearch,
 	}
 

@@ -268,6 +268,21 @@ var Metadata = map[ToolName]ToolMeta{
 		EndpointPath: "/api/merge-images/generate/async",
 	},
 
+	ImagesToVideo: {
+		Name:         ImagesToVideo,
+		Credits:      0,
+		Type:         ToolTypeVideoProcessing,
+		ServiceType:  ServiceTypeVideoProcessor,
+		Description:  "Create a video from multiple images with transitions and optional audio",
+		Examples: []string{
+			"create a slideshow from these images",
+			"make a video from these photos with fade transitions",
+			"turn these images into a video with background music",
+		},
+		OutputType:   OutputTypeVideo,
+		EndpointPath: "/api/video/images-to-video/async",
+	},
+
 	// === Content Analysis Tools ===
 
 	ContentAnalyzer: {

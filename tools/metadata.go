@@ -271,7 +271,7 @@ var Metadata = map[ToolName]ToolMeta{
 	ImagesToVideo: {
 		Name:         ImagesToVideo,
 		Credits:      0,
-		Type:         ToolTypeVideoProcessing,
+		Type:         ToolTypeMedia,
 		ServiceType:  ServiceTypeVideoProcessor,
 		Description:  "Create a video from multiple images with transitions and optional audio",
 		Examples: []string{

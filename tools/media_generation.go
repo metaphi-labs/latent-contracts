@@ -1,6 +1,9 @@
 package tools
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/latent-technology/latent-contracts/types"
+)
 
 // === Image Generation Tools (Imagen) ===
 
@@ -76,7 +79,7 @@ type NanoBananaParams struct {
 	Prompt string `json:"prompt" validate:"required,min=1,max=8000"`
 
 	// Input images for editing, style transfer, or composition (up to 3 recommended)
-	StorageURLs []string      `json:"storage_urls,omitempty" validate:"omitempty,max=3"` // GCS URLs for input images
+	InputImages []types.InputImage `json:"input_images,omitempty" validate:"omitempty,max=3"` // Input images for editing/composition
 	Context []ContextMessage `json:"context,omitempty" validate:"omitempty,max=10"` // Conversation history for multi-turn
 
 	// Generation parameters
@@ -113,9 +116,9 @@ func (n *NanoBananaParams) Validate() error {
 
 // GenerateVideoVeo3Params for generate-video-veo3 tool
 type GenerateVideoVeo3Params struct {
-	Prompt              string          `json:"prompt,omitempty" validate:"required_without=Image,omitempty,min=10,max=2000"`
-	Image               *MediaReference `json:"image,omitempty" validate:"required_without=Prompt"`
-	LastFrame           *MediaReference `json:"last_frame,omitempty"`
+	Prompt              string           `json:"prompt,omitempty" validate:"required_without=Image,omitempty,min=10,max=2000"`
+	Image               *types.InputImage `json:"image,omitempty" validate:"required_without=Prompt"`
+	LastFrame           *types.InputImage `json:"last_frame,omitempty"`
 	Seed                *int64          `json:"seed,omitempty" validate:"omitempty,min=0,max=4294967295"`
 	FPS                 int             `json:"fps,omitempty" validate:"omitempty,oneof=24 30 60"`
 	Duration            int             `json:"duration,omitempty" validate:"omitempty,min=5,max=8"`
@@ -160,9 +163,9 @@ type GenerateVideoVeo3FastNoAudioParams struct {
 
 // GenerateVideoVeo3NoAudioParams for generate-video-veo3-no-audio tool
 type GenerateVideoVeo3NoAudioParams struct {
-	Prompt              string          `json:"prompt,omitempty" validate:"required_without=Image,omitempty,min=10,max=2000"`
-	Image               *MediaReference `json:"image,omitempty" validate:"required_without=Prompt"`
-	LastFrame           *MediaReference `json:"last_frame,omitempty"`
+	Prompt              string           `json:"prompt,omitempty" validate:"required_without=Image,omitempty,min=10,max=2000"`
+	Image               *types.InputImage `json:"image,omitempty" validate:"required_without=Prompt"`
+	LastFrame           *types.InputImage `json:"last_frame,omitempty"`
 	Seed                *int64          `json:"seed,omitempty" validate:"omitempty,min=0,max=4294967295"`
 	FPS                 int             `json:"fps,omitempty" validate:"omitempty,oneof=24 30 60"`
 	Duration            int             `json:"duration,omitempty" validate:"omitempty,min=5,max=8"`

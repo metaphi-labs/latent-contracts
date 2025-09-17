@@ -2,7 +2,7 @@ package tools
 
 import (
 	"fmt"
-	"github.com/latent-technology/latent-contracts/types"
+	"github.com/metaphi-labs/latent-contracts/types"
 )
 
 // === Image Generation Tools (Imagen) ===

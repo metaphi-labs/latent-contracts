@@ -1,6 +1,6 @@
 package tools
 
-import "github.com/latent-technology/latent-contracts/types"
+import "github.com/metaphi-labs/latent-contracts/types"
 
 // === Video Processing Tools ===
 

@@ -79,7 +79,7 @@ type NanoBananaParams struct {
 	Prompt string `json:"prompt" validate:"required,min=1,max=8000"`
 
 	// Input images for editing, style transfer, or composition (up to 3 recommended)
-	InputImages []types.InputImage `json:"input_images,omitempty" validate:"omitempty,max=3"` // Input images for editing/composition
+	InputImages []types.InputImage `json:"images,omitempty" validate:"omitempty,max=3"` // Input images for editing/composition
 	Context []ContextMessage `json:"context,omitempty" validate:"omitempty,max=10"` // Conversation history for multi-turn
 
 	// Generation parameters
